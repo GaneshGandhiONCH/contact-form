@@ -4,7 +4,7 @@ function Header() {
     return (
       <Helmet>
       <link rel="icon" href={HELMET_ICON} /> 
-      <title>Contact form</title> 
+      <title>Contact form</title>
       </Helmet>
     )
   }

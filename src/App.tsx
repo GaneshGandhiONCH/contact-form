@@ -1,6 +1,8 @@
 import styled,{css,createGlobalStyle,ThemeProvider } from 'styled-components'
 import Header from "./components/Header";
 import Global from './components/Global';
+import Wrapper from './components/Wrapper';
+import Body_header from './components/Body_Header';
 
 const themes = {
   background: "#fefefd",
@@ -14,7 +16,12 @@ function App() {
     <ThemeProvider theme={themes}>
       <Header/>
       <Global/>
-      fefwefwefwe
+      fe
+      <Wrapper>
+        <Body_header>
+          Send us a Message
+        </Body_header>
+      </Wrapper>
     </ThemeProvider>
   )
 }
