@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import HELMET_ICON from "../assets/HELMET_ICON.svg"
+import HELMET_ICON from "../assets/icons/HELMET_ICON.svg"
 function Header() {
     return (
       <Helmet>
