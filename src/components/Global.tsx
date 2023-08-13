@@ -13,6 +13,11 @@ const Global = createGlobalStyle`
     }
     body {
         background-color:${props => props.theme.background};
+        display:flex;
+        padding:0 10px;
+        min-height:100vh;
+        align-items:center;
+        justify-content:center;
     }
 `
   
