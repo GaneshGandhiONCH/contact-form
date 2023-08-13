@@ -5,7 +5,7 @@ const Textarea = styled.textarea`
     min-height:120px;
     max-height:300px; 
     outline:none;
-    padding:0 18px 0 50px;
+    padding:5px 18px 0 50px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid ${props => props.theme.unactive};

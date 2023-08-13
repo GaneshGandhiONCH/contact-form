@@ -12,6 +12,9 @@ import Message from "./components/Message";
 import Textarea from "./components/Textarea";
 import FieldIcon from "./components/FieldIcon";
 import MessageIcon from "./components/MessageIcon";
+import ButtonArea from "./components/ButtonArea";
+import Button from "./components/Button";
+import Span from "./components/Span";
 
 import PERSON_ICONU from "./assets/icons/PERSON_ICONU.svg";
 import PERSON_ICONW from "./assets/icons/PERSON_ICONW.svg";
@@ -190,7 +193,7 @@ function App() {
              </Field>
             ))}
           </DoubleField>
-          <Message className="message">
+          <Message>
             <Textarea 
             placeholder="Write your message" 
             value={data.message} 
@@ -200,10 +203,10 @@ function App() {
             ></Textarea>
             <MessageIcon src={data.focus.message ? MESSAGE_ICONW : MESSAGE_ICONU} alt="message icon"/>
           </Message>
-          <div className="button-area">
-            <button type="submit">Send message</button>
-            <span>Sending your message....</span>
-          </div>
+          <ButtonArea>
+            <Button type="submit">Send message</Button>
+            <Span>Sending your message....</Span>
+          </ButtonArea>
         </Form>
       </Wrapper>
       </myContext.Provider>
