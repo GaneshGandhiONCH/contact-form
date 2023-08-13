@@ -1,5 +1,5 @@
 import {useState} from "react";
-import styled,{css,createGlobalStyle,ThemeProvider } from 'styled-components'
+import {ThemeProvider} from 'styled-components'
 import Header from "./components/Header";
 import Global from './components/Global';
 import Wrapper from './components/Wrapper';
@@ -11,6 +11,7 @@ import Input from "./components/Input";
 import Message from "./components/Message";
 import Textarea from "./components/Textarea";
 import FieldIcon from "./components/FieldIcon";
+import MessageIcon from "./components/MessageIcon";
 
 import PERSON_ICON from "./assets/icons/PERSON_ICON.svg";
 import EMAIL_ICON from "./assets/icons/EMAIL_ICON.svg";
@@ -20,15 +21,31 @@ import MESSAGE_ICON from "./assets/icons/MESSAGE_ICON.svg";
 
 const themes = {
   background: "#0D6EFD",
-  active: "#fefefd",
+  active: "#0D6EFD",
   unactive:"#bfbfbf",
+  white:"#fff",
 }
-
+interface Focus {
+  name:boolean,
+  email:boolean,
+  phone:boolean,
+  website:boolean,
+  message:boolean,
+}
 function App() {
-  const [cName,sName] = useState();
-  const [cEmail,sEmail] = useState();
-  const [cPhone,sPhone] = useState();
-  const [cWebsite,sWebsite] = useState();
+  const [cName,sName] = useState<string>();
+  const [cEmail,sEmail] = useState<string>();
+  const [cPhone,sPhone] = useState<string>();
+  const [cWebsite,sWebsite] = useState<string>();
+
+  const [cFocus, setFocus] = useState<Focus>({
+    name: false,
+    email: false,
+    phone: false,
+    website: false,
+    message: false
+  });
+
 
   const inputData1 = [
     {
@@ -36,6 +53,10 @@ function App() {
       img:PERSON_ICON,
       value:cName,
       onChange:(e:any) => sName(e.target.value),
+      onFocus:(e:any) => setFocus(prev => ({
+        ...prev,
+        name: true
+      })),
     },
     {
       content:"email",
@@ -68,7 +89,7 @@ function App() {
           <DoubleField>
             {inputData1.map((data:any,idx:number) => (
             <Field key={idx}>
-              <Input type="text" name={data.content} id={data.content} placeholder={`Enter your ${data.content}`} value={data.value} onChange={data.onChange}/>
+              <Input type="text" placeholder={`Enter your ${data.content}`} value={data.value} onChange={data.onChange} onFocus={data.onFocus}/>
               <FieldIcon src={data.img} alt={`${data.content} icon`}/>
             </Field>
             ))}
@@ -76,14 +97,14 @@ function App() {
           <DoubleField>
             {inputData2.map((data:any,idx:number) => (
              <Field key={idx}>
-              <Input type="text" name={data.content} id={data.content} placeholder={`Enter your ${data.content}`} value={data.value} onChange={data.onChange}/>
+              <Input type="text" placeholder={`Enter your ${data.content}`} value={data.value} onChange={data.onChange} onFocus={data.onFocus}/>
               <FieldIcon src={data.img} alt={`${data.content} icon`}/>
              </Field>
             ))}
           </DoubleField>
           <Message className="message">
             <Textarea placeholder="Write your message"></Textarea>
-            <FieldIcon src={MESSAGE_ICON} alt="message icon"/>
+            <MessageIcon src={MESSAGE_ICON} alt="message icon"/>
           </Message>
           <div className="button-area">
             <button type="submit">Send message</button>
