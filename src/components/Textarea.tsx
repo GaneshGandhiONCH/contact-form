@@ -18,7 +18,6 @@ const Textarea = styled.textarea`
     ${props => css`
       border: 2px solid ${props.theme.active};
     `}
-
   }
 `
 export default Textarea;

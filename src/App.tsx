@@ -1,4 +1,4 @@
-import {useReducer} from "react";
+import {useReducer,createContext} from "react";
 import {ThemeProvider} from 'styled-components'
 import Header from "./components/Header";
 import Global from './components/Global';
@@ -13,12 +13,29 @@ import Textarea from "./components/Textarea";
 import FieldIcon from "./components/FieldIcon";
 import MessageIcon from "./components/MessageIcon";
 
-import PERSON_ICON from "./assets/icons/PERSON_ICON.svg";
-import EMAIL_ICON from "./assets/icons/EMAIL_ICON.svg";
-import PHONE_ICON from "./assets/icons/PHONE_ICON.svg";
-import WEBSITE_ICON from "./assets/icons/WEBSITE_ICON.svg";
-import MESSAGE_ICON from "./assets/icons/MESSAGE_ICON.svg";
+import PERSON_ICONU from "./assets/icons/PERSON_ICONU.svg";
+import PERSON_ICONW from "./assets/icons/PERSON_ICONW.svg";
 
+import EMAIL_ICONU from "./assets/icons/EMAIL_ICONU.svg";
+import EMAIL_ICONW from "./assets/icons/EMAIL_ICONW.svg";
+
+import PHONE_ICONU from "./assets/icons/PHONE_ICONU.svg";
+import PHONE_ICONW from "./assets/icons/PHONE_ICONW.svg";
+
+import WEBSITE_ICONU from "./assets/icons/WEBSITE_ICONU.svg";
+import WEBSITE_ICONW from "./assets/icons/WEBSITE_ICONW.svg";
+
+
+import MESSAGE_ICONU from "./assets/icons/MESSAGE_ICONU.svg";
+import MESSAGE_ICONW from "./assets/icons/MESSAGE_ICONW.svg";
+const myContext = createContext<any>('');
+interface Focus {
+  name:boolean,
+  email:boolean,
+  phone:boolean,
+  website:boolean,
+  message:boolean,
+}
 interface InitialState {
   name: string;
   email: string;
@@ -63,6 +80,21 @@ const Reducer = (state: typeof initialState, action: ActionType) => {
     case "message":
       newState.message = action.payload;
       break;
+    case "Fname": // focus name
+      newState.focus.name = action.payload;
+      break;
+    case "Femail":
+      newState.focus.email = action.payload;
+      break;
+    case "Fphone":
+      newState.focus.phone = action.payload;
+      break;
+    case "Fwebsite":
+      newState.focus.website = action.payload;
+      break;
+    case "Fmessage":
+      newState.focus.message = action.payload;
+      break;
     default:
       throw new Error("Unknown action type");
   }
@@ -70,24 +102,14 @@ const Reducer = (state: typeof initialState, action: ActionType) => {
   return newState; 
 };
 
-
 const themes = {
   background: "#0D6EFD",
   active: "#0D6EFD",
   unactive:"#bfbfbf",
   white:"#fff",
 }
-interface Focus {
-  name:boolean,
-  email:boolean,
-  phone:boolean,
-  website:boolean,
-  message:boolean,
-}
-
 
 function App() {
- 
   const [data,dispatch] = useReducer(Reducer,initialState);
   console.log(data.name)
   function dispatching(type: string, payload: boolean) {
@@ -96,37 +118,46 @@ function App() {
       payload: payload,
     });
   }
-
   const inputData1 = [
     {
       content:"name",
-      img:PERSON_ICON,
+      img:data.focus.name ? PERSON_ICONW : PERSON_ICONU,
       value:data.name,
       onChange:(e:any) => dispatching('name',e.target.value),
+      onFocus:() => dispatching('Fname',true),
+      onBlur:() => dispatching('Fname',false),
     },
     {
       content:"email",
-      img:EMAIL_ICON,
+      img:data.focus.email ? EMAIL_ICONW : EMAIL_ICONU,
       value:data.email,
       onChange:(e:any) => dispatching('email',e.target.value),
+      onFocus:() => dispatching('Femail',true),
+      onBlur:() => dispatching('Femail',false),
     },
   ]
   const inputData2 = [
     {
       content:"phone",
-      img:PHONE_ICON,
+      img:data.focus.phone ? PHONE_ICONW : PHONE_ICONU, 
       value:data.phone,
       onChange:(e:any) => dispatching('phone',e.target.value),
+      onFocus:() => dispatching('Fphone',true),
+      onBlur:() => dispatching('Fphone',false),
     },
     {
       content:"website",
-      img:WEBSITE_ICON,
+      img:data.focus.website ? WEBSITE_ICONW : WEBSITE_ICONU,
       value:data.website,
       onChange:(e:any) => dispatching('website',e.target.value),
+      onFocus:() => dispatching('Fwebsite',true),
+      onBlur:() => dispatching('Fwebsite',false),
     },
   ]
+  console.log(data.focus.name);
   return (
     <ThemeProvider theme={themes}>
+      <myContext.Provider value={{data,dispatching}}>
       <Header/>
       <Global/>
       <Wrapper>
@@ -135,7 +166,12 @@ function App() {
           <DoubleField>
             {inputData1.map((data:any,idx:number) => (
             <Field key={idx}>
-              <Input type="text" placeholder={`Enter your ${data.content}`} value={data.value} onChange={data.onChange} onFocus={data.onFocus}/>
+              <Input 
+              type="text" 
+              placeholder={`Enter your ${data.content}`} 
+              value={data.value} onChange={data.onChange} 
+              onFocus={data.onFocus} 
+              onBlur={data.onBlur}/>
               <FieldIcon src={data.img} alt={`${data.content} icon`}/>
             </Field>
             ))}
@@ -143,14 +179,26 @@ function App() {
           <DoubleField>
             {inputData2.map((data:any,idx:number) => (
              <Field key={idx}>
-              <Input type="text" placeholder={`Enter your ${data.content}`} value={data.value} onChange={data.onChange} onFocus={data.onFocus}/>
+              <Input 
+              type="text" 
+              placeholder={`Enter your ${data.content}`} 
+              value={data.value} 
+              onChange={data.onChange}
+              onBlur={data.onBlur} 
+              onFocus={data.onFocus}/>
               <FieldIcon src={data.img} alt={`${data.content} icon`}/>
              </Field>
             ))}
           </DoubleField>
           <Message className="message">
-            <Textarea placeholder="Write your message" value={data.message} onChange={(e:any) => {dispatching('message',e.target.value)}}></Textarea>
-            <MessageIcon src={MESSAGE_ICON} alt="message icon"/>
+            <Textarea 
+            placeholder="Write your message" 
+            value={data.message} 
+            onChange={(e:any) => {dispatching('message',e.target.value)}}
+            onFocus={() => {dispatching('Fmessage',true)}}
+            onBlur={() => {dispatching('Fmessage',false)}}
+            ></Textarea>
+            <MessageIcon src={data.focus.message ? MESSAGE_ICONW : MESSAGE_ICONU} alt="message icon"/>
           </Message>
           <div className="button-area">
             <button type="submit">Send message</button>
@@ -158,6 +206,7 @@ function App() {
           </div>
         </Form>
       </Wrapper>
+      </myContext.Provider>
     </ThemeProvider>
   )
 }
