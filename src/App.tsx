@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useReducer} from "react";
 import {ThemeProvider} from 'styled-components'
 import Header from "./components/Header";
 import Global from './components/Global';
@@ -19,6 +19,58 @@ import PHONE_ICON from "./assets/icons/PHONE_ICON.svg";
 import WEBSITE_ICON from "./assets/icons/WEBSITE_ICON.svg";
 import MESSAGE_ICON from "./assets/icons/MESSAGE_ICON.svg";
 
+interface InitialState {
+  name: string;
+  email: string;
+  phone: string;
+  website: string;
+  message:string;
+  focus: Focus;
+}
+const initialState:InitialState = {
+  name:'',
+  email:'',
+  phone:'',
+  website:'',
+  message:'',
+  focus: {
+    name: false,
+    email: false,
+    phone: false,
+    website: false,
+    message: false
+  },
+}
+type ActionType = {
+  type: string;
+  payload?: any;
+};
+const Reducer = (state: typeof initialState, action: ActionType) => {
+  const newState = { ...state };
+  switch (action.type) {
+    case "name":
+      newState.name = action.payload;
+      break;
+    case "email":
+      newState.email = action.payload;
+      break;
+    case "phone":
+      newState.phone = action.payload;
+      break;
+    case "website":
+      newState.website = action.payload;
+      break;
+    case "message":
+      newState.message = action.payload;
+      break;
+    default:
+      throw new Error("Unknown action type");
+  }
+
+  return newState; 
+};
+
+
 const themes = {
   background: "#0D6EFD",
   active: "#0D6EFD",
@@ -32,51 +84,45 @@ interface Focus {
   website:boolean,
   message:boolean,
 }
+
+
 function App() {
-  const [cName,sName] = useState<string>();
-  const [cEmail,sEmail] = useState<string>();
-  const [cPhone,sPhone] = useState<string>();
-  const [cWebsite,sWebsite] = useState<string>();
-
-  const [cFocus, setFocus] = useState<Focus>({
-    name: false,
-    email: false,
-    phone: false,
-    website: false,
-    message: false
-  });
-
+ 
+  const [data,dispatch] = useReducer(Reducer,initialState);
+  console.log(data.name)
+  function dispatching(type: string, payload: boolean) {
+    dispatch({
+      type: type,
+      payload: payload,
+    });
+  }
 
   const inputData1 = [
     {
       content:"name",
       img:PERSON_ICON,
-      value:cName,
-      onChange:(e:any) => sName(e.target.value),
-      onFocus:(e:any) => setFocus(prev => ({
-        ...prev,
-        name: true
-      })),
+      value:data.name,
+      onChange:(e:any) => dispatching('name',e.target.value),
     },
     {
       content:"email",
       img:EMAIL_ICON,
-      value:cEmail,
-      onChange:(e:any) => sEmail(e.target.value),
+      value:data.email,
+      onChange:(e:any) => dispatching('email',e.target.value),
     },
   ]
   const inputData2 = [
     {
       content:"phone",
       img:PHONE_ICON,
-      value:cPhone,
-      onChange:(e:any) => sPhone(e.target.value),
+      value:data.phone,
+      onChange:(e:any) => dispatching('phone',e.target.value),
     },
     {
       content:"website",
       img:WEBSITE_ICON,
-      value:cWebsite,
-      onChange:(e:any) => sWebsite(e.target.value),
+      value:data.website,
+      onChange:(e:any) => dispatching('website',e.target.value),
     },
   ]
   return (
@@ -103,7 +149,7 @@ function App() {
             ))}
           </DoubleField>
           <Message className="message">
-            <Textarea placeholder="Write your message"></Textarea>
+            <Textarea placeholder="Write your message" value={data.message} onChange={(e:any) => {dispatching('message',e.target.value)}}></Textarea>
             <MessageIcon src={MESSAGE_ICON} alt="message icon"/>
           </Message>
           <div className="button-area">
