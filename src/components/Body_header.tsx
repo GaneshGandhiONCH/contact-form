@@ -4,6 +4,9 @@ const Body_header = styled.header`
     font-weight:600;
     padding:20px 30px;
     border-radius:1px solid ${props => props.theme.unactive};
+    @media (max-width:600px) {
+      text-align:center;
+    }
 `
 
 

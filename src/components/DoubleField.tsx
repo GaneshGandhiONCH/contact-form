@@ -6,5 +6,9 @@ const DoubleField = styled.div`
  align-items:center;
  margin-bottom:25px;
  justify-content:space-between;
+ @media (max-width:600px) {
+      flex-direction:column;
+      margin-bottom:0px;
+}
 `
 export default DoubleField;

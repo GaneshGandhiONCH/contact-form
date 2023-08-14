@@ -1,4 +1,4 @@
-import styled,{css,createGlobalStyle} from 'styled-components'
+import {createGlobalStyle} from 'styled-components'
 import PoppinsBold from '../assets/fonts/Poppins-Bold.ttf';
 const Global = createGlobalStyle`
    @font-face {
@@ -19,6 +19,7 @@ const Global = createGlobalStyle`
         align-items:center;
         justify-content:center;
     }
+    
 `
   
   export default Global;

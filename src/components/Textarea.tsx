@@ -18,6 +18,9 @@ const Textarea = styled.textarea`
     ${props => css`
       border: 2px solid ${props.theme.active};
     `}
+    @media(max-width:600px) {
+      resize:none;
+    }
   }
 `
 export default Textarea;

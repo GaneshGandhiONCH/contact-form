@@ -1,15 +1,16 @@
-import styled,{css} from "styled-components";
+import styled from "styled-components";
 
 const Button = styled.button`
-    ${props => css `
-    font-size:18px;
-    border:none;
-    color:${props.theme.white};
-    border-radius:5px;
-    background-color:${props.theme.background};
-    padding:13px 25px;
-    cursor:pointer
-        `
-    }
+  font-size: 18px;
+  border: none;
+  color: ${props => props.theme.white};
+  border-radius: 5px; 
+  background-color: ${props => props.theme.background};
+  padding: 13px 25px;
+  cursor: pointer;
+  
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `
 export default Button;
