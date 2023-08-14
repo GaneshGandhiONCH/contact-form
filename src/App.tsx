@@ -1,4 +1,4 @@
-import {useReducer,createContext} from "react";
+import {useReducer,createContext,useRef} from "react";
 import {ThemeProvider} from 'styled-components'
 import Header from "./components/Header";
 import Global from './components/Global';
@@ -114,7 +114,7 @@ const themes = {
 
 function App() {
   const [data,dispatch] = useReducer(Reducer,initialState);
-  console.log(data.name)
+  const spanRef=useRef<any>();
   function dispatching(type: string, payload: boolean) {
     dispatch({
       type: type,
@@ -157,7 +157,7 @@ function App() {
       onBlur:() => dispatching('Fwebsite',false),
     },
   ]
-  console.log(data.focus.name);
+  
   return (
     <ThemeProvider theme={themes}>
       <myContext.Provider value={{data,dispatching}}>
@@ -165,7 +165,7 @@ function App() {
       <Global/>
       <Wrapper>
         <Body_header>Send us a Message</Body_header>
-        <Form action="#">
+        <Form onSubmit={e => e.preventDefault()} action="#">
           <DoubleField>
             {inputData1.map((data:any,idx:number) => (
             <Field key={idx}>
@@ -204,8 +204,8 @@ function App() {
             <MessageIcon src={data.focus.message ? MESSAGE_ICONW : MESSAGE_ICONU} alt="message icon"/>
           </Message>
           <ButtonArea>
-            <Button type="submit">Send message</Button>
-            <Span>Sending your message....</Span>
+            <Button type="submit" onClick={() => {spanRef.current.style.display = "block"}}>Send message</Button>
+            <Span ref={spanRef}>Sending your message....</Span>
           </ButtonArea>
         </Form>
       </Wrapper>
