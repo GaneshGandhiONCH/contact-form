@@ -16,6 +16,7 @@ import ButtonArea from "./components/ButtonArea";
 import Button from "./components/Button";
 import Span from "./components/Span";
 
+
 import PERSON_ICONU from "./assets/icons/PERSON_ICONU.svg";
 import PERSON_ICONW from "./assets/icons/PERSON_ICONW.svg";
 
@@ -160,14 +161,17 @@ function App() {
   function onSubmit(e:any) {
      e.preventDefault();
      let xhr = new XMLHttpRequest(); // create new xml object for communicate with a server without having to reload the page. This is known as AJAX (Asynchronous JavaScript and XML).
-     xhr.open("POST","message.php",true); // sending post request to message.php file
+     xhr.open("POST", "message.php", true); // sending post request to message.php file
      xhr.onload = () => {// once ajax loaded
-      if(xhr.readyState ==4 && xhr.status == 200) {// this means a situation where there is no error
+      if(xhr.readyState == 4 && xhr.status == 200) {// this means a situation where there is no error
         let response = xhr.response; // storing ajax response in a variable;
         console.log(response);
+      } else {
+        console.log('error');
       }
      }
-     xhr.send();
+     let formData = new FormData();
+     xhr.send(formData);
   }
 
   return (
@@ -177,7 +181,7 @@ function App() {
       <Global/>
       <Wrapper>
         <Body_header>Send us a Message</Body_header>
-        <Form onSubmit={(e:any) => onSubmit(e)} action="#">
+        <Form onSubmit={(e:any) => onSubmit(e)} action="POST">
           <DoubleField>
             {inputData1.map((data:any,idx:number) => (
             <Field key={idx}>
