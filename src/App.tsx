@@ -157,7 +157,19 @@ function App() {
       onBlur:() => dispatching('Fwebsite',false),
     },
   ]
-  
+  function onSubmit(e:any) {
+     e.preventDefault();
+     let xhr = new XMLHttpRequest(); // create new xml object for communicate with a server without having to reload the page. This is known as AJAX (Asynchronous JavaScript and XML).
+     xhr.open("POST","message.php",true); // sending post request to message.php file
+     xhr.onload = () => {// once ajax loaded
+      if(xhr.readyState ==4 && xhr.status == 200) {// this means a situation where there is no error
+        let response = xhr.response; // storing ajax response in a variable;
+        console.log(response);
+      }
+     }
+     xhr.send();
+  }
+
   return (
     <ThemeProvider theme={themes}>
       <myContext.Provider value={{data,dispatching}}>
@@ -165,7 +177,7 @@ function App() {
       <Global/>
       <Wrapper>
         <Body_header>Send us a Message</Body_header>
-        <Form onSubmit={e => e.preventDefault()} action="#">
+        <Form onSubmit={(e:any) => onSubmit(e)} action="#">
           <DoubleField>
             {inputData1.map((data:any,idx:number) => (
             <Field key={idx}>
