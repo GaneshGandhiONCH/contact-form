@@ -160,18 +160,8 @@ function App() {
   ]
   function onSubmit(e:any) {
      e.preventDefault();
-     let xhr = new XMLHttpRequest(); // create new xml object for communicate with a server without having to reload the page. This is known as AJAX (Asynchronous JavaScript and XML).
-     xhr.open("POST", "message.php", true); // sending post request to message.php file
-     xhr.onload = () => {// once ajax loaded
-      if(xhr.readyState == 4 && xhr.status == 200) {// this means a situation where there is no error
-        let response = xhr.response; // storing ajax response in a variable;
-        console.log(response);
-      } else {
-        console.log('error');
-      }
-     }
-     let formData = new FormData();
-     xhr.send(formData);
+     
+    
   }
 
   return (
