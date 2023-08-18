@@ -192,11 +192,16 @@ function App() {
   useEffect(() => {
     if(data.buttonChange === true) {
       const timeout = setTimeout(() => {
-        dispatching("spanText", "Sending your message....");
-  
+        dispatching("spanText", "Sending your message..");
         setTimeout(() => {
-          dispatching("spanText", "");  
-        }, 5000);
+          dispatching("spanText", "Sending your message...");  
+        }, 1000);
+        setTimeout(() => {
+          dispatching("spanText", "Sending your message....");  
+        }, 2000);
+        setTimeout(() => {
+          dispatching("spanText", "Your message has been sent");  
+        }, 3000);
   
       }, 0);
   
