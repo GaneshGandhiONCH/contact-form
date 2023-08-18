@@ -1,4 +1,4 @@
-import {useReducer,createContext,useRef} from "react";
+import {useReducer,createContext,useRef,useEffect} from "react";
 import {ThemeProvider} from 'styled-components'
 import emailjs from '@emailjs/browser';
 
@@ -41,6 +41,7 @@ interface Focus {
   phone:boolean,
   website:boolean,
   message:boolean,
+  
 }
 interface InitialState {
   name: string;
@@ -50,6 +51,7 @@ interface InitialState {
   message:string;
   focus: Focus;
   buttonChange: boolean;
+  spanText:string;
 }
 const initialState:InitialState = {
   name:'',
@@ -65,6 +67,7 @@ const initialState:InitialState = {
     message: false
   },
   buttonChange: false,
+  spanText:"",
 }
 type ActionType = {
   type: string;
@@ -106,6 +109,9 @@ const Reducer = (state: typeof initialState, action: ActionType) => {
     case "buttonChange":
       newState.buttonChange = action.payload;
       break;
+    case "spanText":
+      newState.spanText = action.payload;
+      break;
     default:
       throw new Error("Unknown action type");
   }
@@ -123,7 +129,7 @@ const themes = {
 function App() {
   const [data,dispatch] = useReducer(Reducer,initialState);
   const spanRef=useRef<any>();
-  function dispatching(type: string, payload: boolean) {
+  function dispatching(type: string, payload: boolean|string) {
     dispatch({
       type: type,
       payload: payload,
@@ -183,7 +189,20 @@ function App() {
     }
     
   }
-
+  useEffect(() => {
+    if(data.buttonChange === true) {
+      const timeout = setTimeout(() => {
+        dispatching("spanText", "Sending your message....");
+  
+        setTimeout(() => {
+          dispatching("spanText", "");  
+        }, 5000);
+  
+      }, 0);
+  
+      return () => clearTimeout(timeout);
+    }
+  }, [data.buttonChange]);
   return (
     <ThemeProvider theme={themes}>
       <myContext.Provider value={{data,dispatching}}>
@@ -234,7 +253,7 @@ function App() {
           </Message>
           <ButtonArea>
             <Button type="submit" onClick={() => {spanRef.current.style.display = "block", dispatching('buttonChange',true)}}>Send message</Button>
-            <Span ref={spanRef}>{validate ? data.buttonChange ?  "You must write at least 1 symbol in each input": "" : data.buttonChange ? "Sending your message...." : "" } </Span>
+            <Span ref={spanRef}>{validate ? data.buttonChange ?  "You must write at least 1 symbol in each input": "" : data.buttonChange ? data.spanText : "" } </Span>
           </ButtonArea>
         </Form>
       </Wrapper>
