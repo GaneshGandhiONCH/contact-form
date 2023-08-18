@@ -135,7 +135,7 @@ function App() {
       name:"from_name",
       img:data.focus.name ? PERSON_ICONW : PERSON_ICONU,
       value:data.name,
-      onChange:(e:any) => dispatching('name',e.target.value),
+      onChange:(e:any) => {dispatching('name',e.target.value), dispatching('buttonChange',false)},
       onFocus:() => dispatching('Fname',true),
       onBlur:() => dispatching('Fname',false),
     },
@@ -144,7 +144,7 @@ function App() {
       name:"from_email",
       img:data.focus.email ? EMAIL_ICONW : EMAIL_ICONU,
       value:data.email,
-      onChange:(e:any) => dispatching('email',e.target.value),
+      onChange:(e:any) => {dispatching('email',e.target.value), dispatching('buttonChange',false)},
       onFocus:() => dispatching('Femail',true),
       onBlur:() => dispatching('Femail',false),
     },
@@ -154,7 +154,7 @@ function App() {
       content:"phone",
       img:data.focus.phone ? PHONE_ICONW : PHONE_ICONU, 
       value:data.phone,
-      onChange:(e:any) => dispatching('phone',e.target.value),
+      onChange:(e:any) => {dispatching('phone',e.target.value), dispatching('buttonChange',false)},
       onFocus:() => dispatching('Fphone',true),
       onBlur:() => dispatching('Fphone',false),
     },
@@ -162,7 +162,7 @@ function App() {
       content:"website",
       img:data.focus.website ? WEBSITE_ICONW : WEBSITE_ICONU,
       value:data.website,
-      onChange:(e:any) => dispatching('website',e.target.value),
+      onChange:(e:any) => {dispatching('website',e.target.value), dispatching('buttonChange',false)},
       onFocus:() => dispatching('Fwebsite',true),
       onBlur:() => dispatching('Fwebsite',false),
     },
@@ -226,15 +226,15 @@ function App() {
             placeholder="Write your message" 
             name="message"
             value={data.message} 
-            onChange={(e:any) => {dispatching('message',e.target.value)}}
+            onChange={(e:any) => {dispatching('message',e.target.value), dispatching('buttonChange',false)}}
             onFocus={() => {dispatching('Fmessage',true)}}
             onBlur={() => {dispatching('Fmessage',false)}}
             ></Textarea>
             <MessageIcon src={data.focus.message ? MESSAGE_ICONW : MESSAGE_ICONU} alt="message icon"/>
           </Message>
           <ButtonArea>
-            <Button type="submit" onClick={() => {spanRef.current.style.display = "block", dispatching('buttonChange',!data.buttonChange)}}>Send message</Button>
-            <Span ref={spanRef}>{validate ? "You must write at least 1 symbol in each input" : "Sending your message...." } </Span>
+            <Button type="submit" onClick={() => {spanRef.current.style.display = "block", dispatching('buttonChange',true)}}>Send message</Button>
+            <Span ref={spanRef}>{validate ? data.buttonChange ?  "You must write at least 1 symbol in each input": "" : data.buttonChange ? "Sending your message...." : "" } </Span>
           </ButtonArea>
         </Form>
       </Wrapper>
