@@ -49,6 +49,7 @@ interface InitialState {
   website: string;
   message:string;
   focus: Focus;
+  buttonChange: boolean;
 }
 const initialState:InitialState = {
   name:'',
@@ -63,6 +64,7 @@ const initialState:InitialState = {
     website: false,
     message: false
   },
+  buttonChange: false,
 }
 type ActionType = {
   type: string;
@@ -101,6 +103,9 @@ const Reducer = (state: typeof initialState, action: ActionType) => {
     case "Fmessage":
       newState.focus.message = action.payload;
       break;
+    case "buttonChange":
+      newState.buttonChange = action.payload;
+      break;
     default:
       throw new Error("Unknown action type");
   }
@@ -136,7 +141,7 @@ function App() {
     },
     {
       content:"email",
-      name:"from_name",
+      name:"from_email",
       img:data.focus.email ? EMAIL_ICONW : EMAIL_ICONU,
       value:data.email,
       onChange:(e:any) => dispatching('email',e.target.value),
@@ -162,16 +167,21 @@ function App() {
       onBlur:() => dispatching('Fwebsite',false),
     },
   ]
+  const validate = data.name === "" || data.email === "" || data.phone===''|| data.message ==="" || data.website === "";
   const form = useRef<any>('');
   const onSubmit = (e:any) => {
     e.preventDefault();
+    if(validate) {
 
-    emailjs.sendForm('service_nglktv8', 'template_c122emo', form.current, 'Uq7zxKXdTMwbm8ZHu')
+    } else {
+      emailjs.sendForm('service_nglktv8', 'template_c122emo', form.current, 'Uq7zxKXdTMwbm8ZHu')
       .then(() => {
           console.log('success');
       }, () => {
           console.log('fail');
       });
+    }
+    
   }
 
   return (
@@ -223,8 +233,8 @@ function App() {
             <MessageIcon src={data.focus.message ? MESSAGE_ICONW : MESSAGE_ICONU} alt="message icon"/>
           </Message>
           <ButtonArea>
-            <Button type="submit" onClick={() => {spanRef.current.style.display = "block"}}>Send message</Button>
-            <Span ref={spanRef}>Sending your message....</Span>
+            <Button type="submit" onClick={() => {spanRef.current.style.display = "block", dispatching('buttonChange',!data.buttonChange)}}>Send message</Button>
+            <Span ref={spanRef}>{validate ? "You must write at least 1 symbol in each input" : "Sending your message...." } </Span>
           </ButtonArea>
         </Form>
       </Wrapper>
