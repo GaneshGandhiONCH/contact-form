@@ -1,5 +1,7 @@
 import {useReducer,createContext,useRef} from "react";
 import {ThemeProvider} from 'styled-components'
+import emailjs from '@emailjs/browser';
+
 import Header from "./components/Header";
 import Global from './components/Global';
 import Wrapper from './components/Wrapper';
@@ -125,6 +127,7 @@ function App() {
   const inputData1 = [
     {
       content:"name",
+      name:"from_name",
       img:data.focus.name ? PERSON_ICONW : PERSON_ICONU,
       value:data.name,
       onChange:(e:any) => dispatching('name',e.target.value),
@@ -133,6 +136,7 @@ function App() {
     },
     {
       content:"email",
+      name:"from_name",
       img:data.focus.email ? EMAIL_ICONW : EMAIL_ICONU,
       value:data.email,
       onChange:(e:any) => dispatching('email',e.target.value),
@@ -158,10 +162,16 @@ function App() {
       onBlur:() => dispatching('Fwebsite',false),
     },
   ]
-  function onSubmit(e:any) {
-     e.preventDefault();
-     
-    
+  const form = useRef<any>('');
+  const onSubmit = (e:any) => {
+    e.preventDefault();
+
+    emailjs.sendForm('service_nglktv8', 'template_c122emo', form.current, 'Uq7zxKXdTMwbm8ZHu')
+      .then(() => {
+          console.log('success');
+      }, () => {
+          console.log('fail');
+      });
   }
 
   return (
@@ -171,12 +181,13 @@ function App() {
       <Global/>
       <Wrapper>
         <Body_header>Send us a Message</Body_header>
-        <Form onSubmit={(e:any) => onSubmit(e)} action="POST">
+        <Form onSubmit={(e:any) => onSubmit(e)} ref={form}>
           <DoubleField>
             {inputData1.map((data:any,idx:number) => (
             <Field key={idx}>
               <Input 
               type="text" 
+              name={data.name}
               placeholder={`Enter your ${data.content}`} 
               value={data.value} onChange={data.onChange} 
               onFocus={data.onFocus} 
@@ -190,6 +201,7 @@ function App() {
              <Field key={idx}>
               <Input 
               type="text" 
+              name={data.content}
               placeholder={`Enter your ${data.content}`} 
               value={data.value} 
               onChange={data.onChange}
@@ -202,6 +214,7 @@ function App() {
           <Message>
             <Textarea 
             placeholder="Write your message" 
+            name="message"
             value={data.message} 
             onChange={(e:any) => {dispatching('message',e.target.value)}}
             onFocus={() => {dispatching('Fmessage',true)}}
